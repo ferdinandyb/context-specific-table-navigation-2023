@@ -1,0 +1,37 @@
+<launch>
+  <arg name="gazebo_world" default="$(find navigation_modes)/worlds/leon_testbed.world"/>
+  <arg name="locations" default="$(find navigation_modes)/locations/leon_3cm.yaml"/>
+  <arg name = "simulation" value = "True"/>
+
+  <!-- SIMULATION-->
+  <include file="$(find rb1_base_sim_bringup)/launch/rb1_base_complete.launch">
+    <arg name="x_init_pose" value="0" />
+		<arg name="y_init_pose" value="0" />
+		<arg name="z_init_pose" value="0" />
+	  <arg name="gazebo_world" value="$(arg gazebo_world)"/>
+	  <arg name="launch_rviz" value="true"/>
+  </include>
+  
+  <!-- NAVIGATION -->
+  <include file ="$(find navigation_modes)/launch/navigation/move_base_amcl_custom.launch">
+    <arg name = "load_map" value = "$(find navigation_modes)/maps/leon_map.yaml"/>
+    <arg name = "x_init_pose" value = "0.0"/>
+    <arg name = "y_init_pose" value = "0.0"/>
+    <arg name = "z_init_pose" value = "0.0"/>
+    <arg name = "a_init_pose" value = "0.0"/>
+  </include>
+
+  <!-- EXPERIMENT -->
+  <node name="ultrasound_arduino_converter" pkg="navigation_modes" type="ultrasound_converter.py"  respawn="true" />
+  <node name="biscee_patrol_sm" pkg="navigation_modes" type="biscee_patrol_sm.py"  output="screen"/>
+
+  <node type="location_service.py" pkg="navigation_modes" args="-ph $(arg locations)" name="biscee_save_location_service">
+  </node>
+
+	<rosparam command="load" file="$(find navigation_modes)/config/custom.yaml" ns="biscee_tables"/>
+
+	<node name = "biscee_table_sm" pkg="navigation_modes" type="biscee_tables_sm.py"  output="screen">
+		<param name="simulation" value="$(arg simulation)"/>
+	</node>
+
+  </launch>

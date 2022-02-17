@@ -1,0 +1,36 @@
+map_frame: "/rb1_base_map"
+base_link_frame: "/rb1_base_base_link"
+navigation_server: "/rb1_base/move_base"
+is_ultrasound_approach_disabled: false
+ultra_topics:
+  - '/ultrasound_distance_left_90'
+  - '/ultrasound_distance_left_45'
+  - '/ultrasound_distance_front_bottom'
+  - '/ultrasound_distance_right_45'
+  - '/ultrasound_distance_right_90'
+laser_topic: "/rb1_base/front_laser/scan"
+cmd_vel_topic: '/rb1_base/biscee/cmd_vel'
+path_topic: "/rb1_base/move_base/TebLocalPlannerROS/global_plan"
+recovery_cone: 90
+path_lookahead: 60 # this is in degrees
+safety_distance: 0.07
+sovereignty_dist: 0.3
+control_tau: 1
+recovery_w: 0.05
+table_manners:
+  watch_faces_time: 20
+  watch_tray: 8
+  sounds:
+    tray:
+      init_cl: 0.07
+      init_f: 665
+      lvl: 4
+    greet:
+      init_cl: 0.07
+      init_f: 465
+      lvl: 4
+say_goodbye: false
+say_goodbye_sound:
+  init_cl: 0.16
+  init_f: 565
+  lvl: 5

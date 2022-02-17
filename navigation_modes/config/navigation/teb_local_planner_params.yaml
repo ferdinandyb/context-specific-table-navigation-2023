@@ -1,0 +1,162 @@
+#timed elastic band: locally optimizes the robot's trajectory with respect to trajectory execution time, separation from obstacles and compliance with kinodynamic constraints at runtime
+base_local_planner: teb_local_planner/TebLocalPlannerROS
+
+TebLocalPlannerROS:
+  odom_topic: robotnik_base_control/odom
+#topic name of the odometry message
+  map_frame: rb1_base_odom
+#global planning frame
+     
+  # Trajectory
+   
+  teb_autosize: True
+#enable automatic resizing of the trajectory with respect to the temporal resolution
+  dt_ref: 0.3
+#desired temporal resolution of the trajectory
+  dt_hysteresis: 0.1
+#hysteresis for automatic resizing depending on the current temporal resolution
+  global_plan_overwrite_orientation: True
+#overwrite orientation of local subgoals provided by the global planner
+  max_global_plan_lookahead_dist: 5.0 #1.0
+#maximum length of the subset of the global plan taken into account for optimization
+  feasibility_check_no_poses: 5
+#specify up to which pose on the predicted plan the feasibility should be checked each sampling interval
+     
+  # Robot
+          
+#allow_init_with_backwards_motion: false
+#if true, underlying trajectories might be initialized with backwards motions in case the goal is behind the start within the local costmap
+  max_vel_x: 0.25 #1.0
+#maximum translational velocity of the robot m/s
+  max_vel_x_backwards: 0.1
+#maximum absolute translational velocity of the robot while driving backwards in m/s
+  max_vel_theta: 0.25 #1.0
+#maximum angular velocity of the robot in radian/s
+  acc_lim_x: 0.05
+#maximum translational acceleration of the robot m/s^2
+  acc_lim_theta: 0.05
+#maximum angular acceleration of the robot in radian/s^2
+  min_turning_radius: 0.0
+#minimum turning radius for a carlike robot (0 for a diff. drive robot)
+  wheelbase: 0.0
+#distance between the rear and front axle
+  cmd_angle_instead_rotvel: false
+#substitute the rotational velocity in the commanded velocity message by the corresponding steering angle [-pi/2, pi/2]
+  footprint_model: # types: "point", "circular", "two_circles", "line", "polygon"
+    type: "circular"
+#approximates the robot's 2D contour
+    radius: 0.3 # for type "circular"
+    #line_start: [-0.3, 0.0] # for type "line"
+    #line_end: [0.3, 0.0] # for type "line"
+    #front_offset: 0.2 # for type "two_circles"
+    #front_radius: 0.2 # for type "two_circles"
+    #rear_offset: 0.2 # for type "two_circles"
+    #rear_radius: 0.2 # for type "two_circles"
+    #vertices: [ [0.25, -0.05], [0.18, -0.05], [0.18, -0.18], [-0.19, -0.18], [-0.25, 0], [-0.19, 0.18], [0.18, 0.18], [0.18, 0.05], [0.25, 0.05] ] # for type "polygon"
+ 
+  # GoalTolerance
+     
+  xy_goal_tolerance: 0.10
+#allowed final euclidean distance to the goal position in meters
+  yaw_goal_tolerance: 0.1 #0.05
+#allowed final orientation error in radians
+  free_goal_vel: False
+#remove the goal velocity constraint such that the robot can arrive at the goal with maximum speed
+     
+  # Obstacles
+     
+  min_obstacle_dist: 0.1
+#minimum desired separation from obstacles in meters
+  include_costmap_obstacles: True
+#specify if obstacles of the local costmap should be taken into account
+  costmap_obstacles_behind_robot_dist: 1.0
+#limit the occupied local costmap obstacles taken into account for planning behind the robot (distance in meters)
+  obstacle_poses_affected: 30
+#each obstacle position is attached to the closest pose on the trajectory in order to keep a distance
+  costmap_converter_plugin: "costmap_converter::CostmapToPolygonsDBSMCCH"
+#define plugin name in order to convert costmap cells to points/lines/polygons. set an empty string to disable the conversion such that all cells are treated as point-obstacles
+  #costmap_converter_plugin: "costmap_converter::CostmapToLinesDBSRANSAC"
+  #costmap_converter_plugin: "costmap_converter::CostmapToLinesDBSMCCH"
+  #costmap_converter_plugin: "costmap_converter::CostmapToPolygonsDBSConcaveHull"
+  #costmap_converter_plugin: "" # deactivate plugin
+  costmap_converter_spin_thread: True
+#if true, the costmap converter invokes its callback queue in a different thread
+  costmap_converter_rate: 5
+#rate that defines how often the costmap_converter plugin processes the current costmap in Hz
+  # costmap_converter/CostmapToLinesDBSRANSAC:
+  #    cluster_max_distance: 0.4
+ 
+  # Optimization
+     
+  no_inner_iterations: 5
+# number of actual solver iterations called in each outerloop iteration
+  no_outer_iterations: 4
+# each outerloop iteration automatically resizes the trajectory according to the desired temporal resolution dt_ref and invokes the internal optimizer (that performs no_inner_iterations). The total number of solver iterations in each planning cycle is the product of both values.
+  optimization_activate: True
+  optimization_verbose: False
+#print verbose information
+  penalty_epsilon: 0.05
+#add a small safety margin to penalty functions for hard-constraint approximations
+  weight_max_vel_x: 5
+#optimization weight for satisfying the maximum allowed translational velocity (default:2)
+  weight_max_vel_theta: 1
+#optimization weight for satisfying the maximum allowed angulat velocity (default:1)
+  weight_acc_lim_x: 10
+#optimization weight for satisfying the maximum allowed translational acceleration (default:1)
+  weight_acc_lim_theta: 10
+#optimization weight for satisfying the maximum allowed angular acceleration (default:1)
+  weight_kinematics_nh: 1000
+#optimization weight for satisfying the non-holonomic kinematics
+  weight_kinematics_forward_drive: 1000
+#optimization weight for forcing the robot to choose only forward directions (positive transl. velocities). Value around 1000 almost prevents backward driving, but cannot be guaranteed.
+  weight_kinematics_turning_radius: 1
+#optimization weight for enforcing a mimimum turning radius for carlike robots
+  weight_optimaltime: 1
+#optimization weight for contracting the trajectory with respect to the transition/execution time
+  weight_obstacle: 50
+#optimization weight for keeping a mimimum distance from obstacles
+  weight_dynamic_obstacle: 10 # not in use yet
+#optimization weight for satisfying a minimum separation from dynamic obstacles
+  selection_alternative_time_cost: False 
+ # if true, time cost (sum of squared time differences) is replaced by the total transition time (sum of time differences)
+
+  # Homotopy Class Planner
+ 
+  enable_homotopy_class_planning: False
+#activate parallel planning in distinctive topologies
+  enable_multithreading: True
+#activate multiple threading in order to plan each trajectory in a different thread
+  simple_exploration: False
+#if true, distinctive trajectories are explored using a simple left-right approach (pass each obstacle on the left or right side)for path generation, otherwise sample possible roadmaps randomly in a specified region between start and goal
+  max_number_classes: 4
+#specify the maximum number of distinctive trajectories taken into account
+  roadmap_graph_no_samples: 15
+#specify the number of samples generated for creating the roadmap graph
+  roadmap_graph_area_width: 5
+#random keypoints/waypoints are sampled in a rectangular region between start and goal. Specify the width of that area in meters (default: 6)
+  h_signature_prescaler: 0.5
+#scale internal parameter (H-signature) that is used to distinguish between homotopy classes. Reduce this parameter only if you observe problems with too many obstacles in the local cost map, do not choose it extremely low otherwise obstacles cannot be distinguished from each other (0.2<value<=1)
+  h_signature_threshold: 0.1
+#two h-signatures are assumed to be equal if both the difference of real parts and complex parts are below the specified treshold
+  obstacle_keypoint_offset: 0.1
+#if simple_exploration is turned on, this parameter determines the distance on the left and right side of the obstacle at which a new keypoint will be created
+  obstacle_heading_threshold: 0.45
+#specify the value of the normalized scalar product between obstacle heading and goal heading in order to take them (obstacles) into account for exploration
+  visualize_hc_graph: False
+#visualize the graph that is created for exploring distinctive trajectories 
+#
+  ### These are set for recovery but need to be set under the planner (probably?)
+  acc_lim_th: 1
+  max_rotation_vel: 0.5
+  min_in_place_rotational_vel: 0.1
+
+#RotateRecovery:
+#        max_rotational_vel: 0.02
+##the maximum rotational velocity allowed for the base in radian/s
+#        min_in_place_rotational_vel: 0.01
+##the minimum rotational velocity allowed for the base while performing in-place rotations in radian/s
+#        acc_lim_th: 0.2
+##the rotational acceleration limit of the robot in radian/s^2
+
+
+
