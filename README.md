@@ -46,14 +46,14 @@ The data were saved and organized taking into account the environment where the 
 
 **real** *(int)*            Enviroment where the data is gathered (*1 = real , 0 = simulation*)	    
 **robot** *(string)*        Robot used to obtain the data (*Orbi-One, Biscee*)	    
-**type** *(string)*	        Navigation mode used (*contextless, context-aware*)
-**tabledist** *(int)*       Distance to the table from defined locations (*3, 15 (cm)* )
-**going_from** *(string)*	Source location (*LB, L1, L2, L3, L4*)
-**going_to** *(string)*	    Destination location (*LB, L1, L2, L3, L4*)
-**time** *(seconds)*	    Time spent to reach the final position
-**scaled_time** *(seconds)*	Time spent to reach the final position using the context-aware data as basae
-**distance** *(meters)*	    Euclidean distance to the final location after robot stops 
-**orientation** *(degrees)* Orientation distance to the final location after robot stops
+**type** *(string)*	        Navigation mode used (*contextless, context-aware*) 
+**tabledist** *(int)*       Distance to the table from defined locations (*3, 15 (cm)* )    
+**going_from** *(string)*	Source location (*LB, L1, L2, L3, L4*)  
+**going_to** *(string)*	    Destination location (*LB, L1, L2, L3, L4*) 
+**time** *(seconds)*	    Time spent to reach the final position  
+**scaled_time** *(seconds)*	Time spent to reach the final position using the context-aware data as base    
+**distance** *(meters)*	    Euclidean distance to the final location after robot stops  
+**orientation** *(degrees)* Orientation distance to the final location after robot stops    
 
 
 ## Results contextless vs context-aware navigation
