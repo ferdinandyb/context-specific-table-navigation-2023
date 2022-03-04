@@ -1,5 +1,7 @@
 # Context-aware and cost-effective navigation for approaching restaurant tables with lidar and ultrasound range sensors
 
+[![DOI](https://zenodo.org/badge/460363860.svg)](https://zenodo.org/badge/latestdoi/460363860)
+
 This package presents a new system, where the LIDAR is used for SLAM, avoiding obstacles and navigating the areas between tables, using the ROS navigation stack, while cheap URF sensors and a simple, but the reliable module is responsible for navigating right up to a table using smooth movements. Using this context switch also allows the robot to avoid customers with a wide margin, but still approach the tables very closely. 
 
 Dataset: URL link
