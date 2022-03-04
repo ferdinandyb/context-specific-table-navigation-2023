@@ -57,4 +57,4 @@ The data were saved and organized taking into account the environment where the 
 
 
 ## Results contextless vs context-aware navigation
-TODO: BINDER link
+https://mybinder.org/v2/gh/ferdinandyb/context-aware-table-navigation-2022/HEAD?labpath=results.ipynb
