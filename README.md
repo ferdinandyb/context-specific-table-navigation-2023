@@ -1,4 +1,4 @@
-# Context-aware and cost-effective navigation for approaching restaurant tables with lidar and ultrasound range sensors
+# Context-aware navigation for approaching restaurant tables with LIDAR and URF sensors
 
 [![DOI](https://zenodo.org/badge/460363860.svg)](https://zenodo.org/badge/latestdoi/460363860)
 
@@ -60,3 +60,5 @@ The data were saved and organized taking into account the environment where the 
 
 ## Results contextless vs context-aware navigation
 TODO 
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ferdinandyb/context-aware-table-navigation-2022/HEAD?labpath=%2Fdataset%2Fresults.ipynb)
