@@ -1,4 +1,4 @@
-# Context-aware navigation for approaching restaurant tables with LIDAR and URF sensors
+# Context-specific navigation for approaching restaurant tables with LIDAR and URF sensors
 
 [![DOI](https://zenodo.org/badge/460363860.svg)](https://zenodo.org/badge/latestdoi/460363860)
 
@@ -44,21 +44,21 @@ $ ./stop.sh
 ```
 
 ## Dataset
-The data were saved and organized taking into account the environment where the data have been recorded (real or simulated), the robots used to collect the data (Orbi-One or Biscee), the location from, and location to the robot were moving (LB, L1, L2, L3, L4), the distance to the table of the locations (3 or 15 cm) and the navigation mode used (context-aware or contextless). In that way the variables and values that will be found in the dataset are:
+The data were saved and organized taking into account the environment where the data have been recorded (real or simulated), the robots used to collect the data (Orbi-One or Biscee), the location from, and location to the robot were moving (LB, L1, L2, L3, L4), the distance to the table of the locations (3 or 15 cm) and the navigation mode used (context-specific or contextless). In that way, the variables and values that will be found in the dataset are:
 
-**real** *(int)*            Enviroment where the data is gathered (*1 = real , 0 = simulation*)	    
+**real** *(int)*            Environment where the data is gathered (*1 = real , 0 = simulation*)	    
 **robot** *(string)*        Robot used to obtain the data (*Orbi-One, Biscee*)	    
-**type** *(string)*	        Navigation mode used (*contextless, context-aware*)     
+**type** *(string)*	        Navigation mode used (*contextless, context-specific*)     
 **tabledist** *(int)*       Distance to the table from defined locations (*3, 15 (cm)* )    
 **going_from** *(string)*	Source location (*LB, L1, L2, L3, L4*)  
 **going_to** *(string)*	    Destination location (*LB, L1, L2, L3, L4*)     
 **time** *(seconds)*	    Time spent to reach the final position  
-**scaled_time** *(seconds)*	Time spent to reach the final position using the context-aware data as base    
+**scaled_time** *(seconds)*	Time spent to reach the final position using the context-specific data as base    
 **distance** *(meters)*	    Euclidean distance to the final location after robot stops  
 **orientation** *(degrees)* Orientation distance to the final location after robot stops    
 
 
-## Results contextless vs context-aware navigation
+## Results contextless vs context-specific navigation
 
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ferdinandyb/context-aware-table-navigation-2022/HEAD?labpath=%2Fdataset%2Fresults.ipynb)
